@@ -61,16 +61,11 @@ class UI {
 class Store {
     static getCompanies() {
         let companies;
-
-        let request = Request.sendRequest('software-house-list.json');
-        if (request.status === 200) {
-            companies = JSON.parse(request.responseText);
+        
+        if (localStorage.getItem('companies') === null) {
+            companies = [];
         } else {
-            const fs = require('fs');
-            let data = "test content";
-            fs.writeFile('software-house-list.json', data, (err) => {
-                if (err) throw err;
-            })
+            books = JSON.parse(localStorage.getItem('books'));
         }
 
         return companies;
