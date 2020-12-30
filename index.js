@@ -7,27 +7,7 @@ class Company {
 
 class UI {
     static displayCompanies() {
-        // Fake database
-        const StoredCompanies = [
-            {
-               "url":"https://www.10clouds.com",
-               "name":"10Clouds"
-            },
-            {
-               "url":"https://2cW.pl",
-               "name":"2cW"
-            },
-            {
-               "url":"https://www.2n.pl/",
-               "name":"2N"
-            },
-            {
-               "url":"https://3step.pl/",
-               "name":"3Step"
-            }
-        ];
-
-        const companies = StoredCompanies;
+        const companies = Store.getCompanies();
 
         companies.forEach(company => {
             UI.addCompanyToList(company);
@@ -116,7 +96,12 @@ document.querySelector('.add-company').addEventListener('submit', (e) => {
     // Instantiate Company
     const company = new Company(name, url);
     console.log(company);
+
+    // Add Company to UI
     UI.addCompanyToList(company);
+
+    // Add Company to Store
+    Store.addCompany(company);
 
     // Clear fields
     UI.clearFields();
@@ -124,5 +109,9 @@ document.querySelector('.add-company').addEventListener('submit', (e) => {
 
 // Remove a Company
 document.querySelector('.companies-list').addEventListener('click', (e) => {
+    // Remove Company from Store
+    Store.removeCompany(e.target.previousElementSibling.textContent);
+
+    // Remove Company from UI
     UI.deleteCompany(e.target);
 })
