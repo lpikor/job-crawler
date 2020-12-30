@@ -65,17 +65,21 @@ class Store {
         if (localStorage.getItem('companies') === null) {
             companies = [];
         } else {
-            books = JSON.parse(localStorage.getItem('books'));
+            companies = JSON.parse(localStorage.getItem('companies'));
         }
 
         return companies;
     }
 
-    addCompany(company) {
+    static addCompany(company) {
+        const companies = Store.getCompanies();
 
+        companies.push(company);
+
+        localStorage.setItem('companies', JSON.stringify(companies));
     }
 
-    removeCompany(name) {
+    static removeCompany(name) {
 
     }
 }
