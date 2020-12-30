@@ -49,3 +49,18 @@ class UI {
 
 // Display Companies
 document.addEventListener('DOMContentLoaded', UI.displayCompanies);
+
+// Add a Company
+document.querySelector('.add-company').addEventListener('submit', (e) => {
+    // Prevent submit
+    e.preventDefault();
+
+    // Get form values
+    const name = document.querySelector('#company-name').value;
+    const url = document.querySelector('#company-url').value;
+
+    // Instantiate Company
+    const company = new Company(name, url);
+    console.log(company);
+    UI.addCompanyToList(company);
+});
