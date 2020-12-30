@@ -1,7 +1,8 @@
 class Company {
-    constructor(name, url) {
+    constructor(name, url, id) {
         this.name = name;
         this.url = url;
+        this.id = id;
     }
 }
 
@@ -20,7 +21,9 @@ class UI {
         const listItem = document.createElement('li');
 
         listItem.innerHTML = `
-            <a href="${company.url}">${company.name}</a> <button class="remove-company">Remove</button>
+            <a href="${company.url}">${company.name}</a>
+            <span style="display:none;">${company.id}</span>
+            <button class="remove-company">Remove</button>
         `;
 
         list.appendChild(listItem);
@@ -59,11 +62,11 @@ class Store {
         localStorage.setItem('companies', JSON.stringify(companies));
     }
 
-    static removeCompany(name) {
+    static removeCompany(id) {
         const companies = Store.getCompanies();
 
         companies.forEach((company, index) => {
-            if (company.name === name) {
+            if (company.id === id) {
                 companies.splice(index, 1);
             }
         });
@@ -92,9 +95,12 @@ document.querySelector('.add-company').addEventListener('submit', (e) => {
     // Get form values
     const name = document.querySelector('#company-name').value;
     const url = document.querySelector('#company-url').value;
+    const ID = () => {
+        return '_' + Math.random().toString(36).substr(2, 9);
+    }
 
     // Instantiate Company
-    const company = new Company(name, url);
+    const company = new Company(name, url, ID());
     console.log(company);
 
     // Add Company to UI
