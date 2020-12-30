@@ -47,7 +47,7 @@ class UI {
     }
 
     static deleteCompany(element) {
-        if(element.classList.contains('remove-company')) {
+        if (element.classList.contains('remove-company')) {
             element.parentElement.remove();
         }
     }
@@ -56,6 +56,31 @@ class UI {
         document.querySelector('#company-name').value = '';
         document.querySelector('#company-url').value = '';
     }
+}
+
+class Store {
+    static getCompanies() {
+        let companies;
+
+        let request = new XMLHttpRequest();
+        request.open('GET', 'software-house-list.json', false);
+        request.send(null);
+        if(request.status === 200) {
+            companies = JSON.parse(request.responseText);
+        }
+
+        return companies;
+    }
+
+    addCompany(company) {
+
+    }
+
+    removeCompany(name) {
+
+    }
+
+
 }
 
 // Display Companies
