@@ -80,7 +80,15 @@ class Store {
     }
 
     static removeCompany(name) {
+        const companies = Store.getCompanies();
 
+        companies.forEach((company, index) => {
+            if (company.name === name) {
+                companies.splice(index, 1);
+            }
+        });
+
+        localStorage.setItem('companies', JSON.stringify(companies));
     }
 }
 
