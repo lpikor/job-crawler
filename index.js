@@ -77,8 +77,21 @@ class Request {
     static sendRequest(target) {
         let request = new XMLHttpRequest();
         request.open('GET', target, false);
-        request.send(null);
+        try {
+            request.send(null);
+        } catch {
+            console.log('cos sie popsulo: ');
+        }
         return request;
+    }
+
+    static urlExists(target) {
+        let request = this.sendRequest(target);
+        if (request.status == 200) {
+            console.log('nie ma takiego bicia');
+            return true;
+        }
+        return false;
     }
 }
 
