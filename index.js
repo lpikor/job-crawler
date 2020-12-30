@@ -62,11 +62,15 @@ class Store {
     static getCompanies() {
         let companies;
 
-        let request = new XMLHttpRequest();
-        request.open('GET', 'software-house-list.json', false);
-        request.send(null);
-        if(request.status === 200) {
+        let request = Request.sendRequest('software-house-list.json');
+        if (request.status === 200) {
             companies = JSON.parse(request.responseText);
+        } else {
+            const fs = require('fs');
+            let data = "test content";
+            fs.writeFile('software-house-list.json', data, (err) => {
+                if (err) throw err;
+            })
         }
 
         return companies;
@@ -79,8 +83,15 @@ class Store {
     removeCompany(name) {
 
     }
+}
 
-
+class Request {
+    static sendRequest(target) {
+        let request = new XMLHttpRequest();
+        request.open('GET', target, false);
+        request.send(null);
+        return request;
+    }
 }
 
 // Display Companies
