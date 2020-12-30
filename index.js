@@ -45,6 +45,11 @@ class UI {
 
         list.appendChild(listItem);
     }
+
+    static clearFields() {
+        document.querySelector('#company-name').value = '';
+        document.querySelector('#company-url').value = '';
+    }
 }
 
 // Display Companies
@@ -63,4 +68,7 @@ document.querySelector('.add-company').addEventListener('submit', (e) => {
     const company = new Company(name, url);
     console.log(company);
     UI.addCompanyToList(company);
+
+    // Clear fields
+    UI.clearFields();
 });
