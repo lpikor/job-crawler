@@ -40,10 +40,16 @@ class UI {
         const listItem = document.createElement('li');
 
         listItem.innerHTML = `
-            <li><a href="${company.url}">${company.name}</a></li>
+            <a href="${company.url}">${company.name}</a> <button class="remove-company">Remove</button>
         `;
 
         list.appendChild(listItem);
+    }
+
+    static deleteCompany(element) {
+        if(element.classList.contains('remove-company')) {
+            element.parentElement.remove();
+        }
     }
 
     static clearFields() {
@@ -72,3 +78,8 @@ document.querySelector('.add-company').addEventListener('submit', (e) => {
     // Clear fields
     UI.clearFields();
 });
+
+// Remove a Company
+document.querySelector('.companies-list').addEventListener('click', (e) => {
+    UI.deleteCompany(e.target);
+})
