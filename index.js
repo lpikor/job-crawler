@@ -161,6 +161,26 @@ document.querySelector('.add-company').addEventListener('submit', (e) => {
     UI.clearFields();
 });
 
+// Listen for JSON submit
+document.querySelector('#input').addEventListener('change', (e) => {
+    const file = e.target.files[0].text();
+    file.then(companies => {
+        companies = JSON.parse(companies);
+        companies.forEach(company => {
+            const ID = () => {
+                return '_' + Math.random().toString(36).substr(2, 9);
+            }
+
+            newCompany = new Company(company.name, company.url, ID());
+
+            Store.addCompany(newCompany);
+            UI.addCompanyToList(newCompany);
+        });
+        console.log(companies[0]);
+    });
+});
+
+
 // Remove a Company
 document.querySelector('.companies-list').addEventListener('click', (e) => {
     if(e.target.classList.contains('remove-company')) {
