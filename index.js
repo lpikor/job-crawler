@@ -3,6 +3,7 @@ class Company {
         this.name = name;
         this.url = this.fixUrl(url);
         this.id = id;
+        this.jobsUrl = this.getJobsUrl(this.url);
     }
 
     fixUrl(url) {
@@ -13,6 +14,29 @@ class Company {
             url += '/';
         }
         return url;
+    }
+
+    getJobsUrl(url) {
+        const jobsKeywords = [
+            'career',
+            'careers',
+            'job',
+            'jobs',
+            'join-us',
+            'kariera',
+            'oferty-pracy',
+            'praca'
+        ];
+        let jobsUrl = '';
+        jobsKeywords.every(keyword => {
+            if (Request.urlExists(url + keyword)) {
+                jobsUrl = url + keyword;
+                return false;
+            }
+            jobsUrl = 'Not found';
+            return true;
+        });
+        return jobsUrl;
     }
 }
 
