@@ -60,6 +60,10 @@ class UI {
             <button class="remove-company">Remove</button>
         `;
 
+        if (company.jobsUrl !== 'Not found') {
+            listItem.innerHTML += `<a href="${company.jobsUrl}" target="_blank">Job offers</a>`;
+        }
+
         list.appendChild(listItem);
     }
 
