@@ -4,6 +4,7 @@ class Company {
         this.url = this.fixUrl(url);
         this.id = id;
         this.jobsUrl = this.getJobsUrl(this.url);
+        this.hasJuniorOffer = (this.jobsUrl !== 'Not found') ? this.hasJuniorOffer(this.jobsUrl) : false;
     }
 
     fixUrl(url) {
@@ -38,6 +39,14 @@ class Company {
         });
         return jobsUrl;
     }
+
+    hasJuniorOffer(jobsUrl) {
+        const request = Request.sendRequest(jobsUrl);
+        if(request.responseText.search(/junior/i) !== -1) {
+            return true;
+        }
+        return false;
+    }
 }
 
 class UI {
@@ -62,6 +71,10 @@ class UI {
 
         if (company.jobsUrl !== 'Not found') {
             listItem.innerHTML += `<a href="${company.jobsUrl}" target="_blank">Job offers</a>`;
+        }
+
+        if (company.hasJuniorOffer) {
+            listItem.innerHTML += 'Has junior';
         }
 
         list.appendChild(listItem);
@@ -149,7 +162,6 @@ document.querySelector('.add-company').addEventListener('submit', (e) => {
 
     // Instantiate Company
     const company = new Company(name, url, ID());
-    console.log(company);
 
     // Add Company to UI
     UI.addCompanyToList(company);
@@ -176,7 +188,6 @@ document.querySelector('#input').addEventListener('change', (e) => {
             Store.addCompany(newCompany);
             UI.addCompanyToList(newCompany);
         });
-        console.log(companies[0]);
     });
 });
 
