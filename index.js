@@ -58,6 +58,18 @@ class UI {
         });
     }
 
+    static displayMatchingCompanies() {
+        const companies = Store.getCompanies();
+        
+        const matchingCompanies = companies.filter(company => {
+            return company.hasJuniorOffer;
+        });
+
+        matchingCompanies.forEach(company => {
+            UI.addCompanyToList(company);
+        })
+    }
+
     static addCompanyToList(company) {
         const list = document.querySelector('.companies-list');
 
