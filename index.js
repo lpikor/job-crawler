@@ -1,8 +1,18 @@
 class Company {
     constructor(name, url, id) {
         this.name = name;
-        this.url = url;
+        this.url = this.fixUrl(url);
         this.id = id;
+    }
+
+    fixUrl(url) {
+        if (!url.includes('http')) {
+            url = 'http://' + url;
+        }
+        if (url.charAt(url.length-1) !== "/") {
+            url += '/';
+        }
+        return url;
     }
 }
 
@@ -80,7 +90,7 @@ class Request {
         try {
             request.send(null);
         } catch {
-            console.log('cos sie popsulo: ');
+            console.log('Error connecting to ' + target);
         }
         return request;
     }
@@ -88,7 +98,6 @@ class Request {
     static urlExists(target) {
         let request = this.sendRequest(target);
         if (request.status == 200) {
-            console.log('nie ma takiego bicia');
             return true;
         }
         return false;
