@@ -43,6 +43,7 @@ class Company {
     hasJuniorOffer(jobsUrl) {
         const request = Request.sendRequest(jobsUrl);
         if(request.responseText.search(/junior/i) !== -1) {
+            UI.addMatchingCompanyToList(this);
             return true;
         }
         return false;
@@ -54,7 +55,7 @@ class UI {
         const companies = Store.getCompanies();
 
         companies.forEach(company => {
-            UI.addCompanyToList(company);
+            UI.addCompanyToDatabase(company);
         });
     }
 
@@ -66,30 +67,45 @@ class UI {
         });
 
         matchingCompanies.forEach(company => {
-            UI.addCompanyToList(company);
+            UI.addMatchingCompanyToList(company);
         })
     }
 
-    static addCompanyToList(company) {
+    static addCompanyToDatabase(company) {
         const list = document.querySelector('.companies-list');
 
         const listItem = document.createElement('li');
 
         listItem.innerHTML = `
             <a href="${company.url}" target="_blank">${company.name}</a>
+            <a href="${company.url}" target="_blank">(${company.url})</a>
             <span style="display:none;">${company.id}</span>
             <button class="remove-company">Remove</button>
         `;
 
-        if (company.jobsUrl !== 'Not found') {
-            listItem.innerHTML += `<a href="${company.jobsUrl}" target="_blank">Job offers</a>`;
-        }
+        list.appendChild(listItem);
+    }
 
-        if (company.hasJuniorOffer) {
-            listItem.innerHTML += 'Has junior';
-        }
+    static addMatchingCompanyToList(company) {
+        const list = document.querySelector('.matching-companies-list');
+
+        const listItem = document.createElement('li');
+
+        listItem.innerHTML = `
+            <a href="${company.url}" target="_blank">${company.name}</a>
+            <span style="display:none;">${company.id}</span>
+            <a href="${company.jobsUrl}" target="_blank">Job offers</a>
+        `;
 
         list.appendChild(listItem);
+    }
+
+    static clearMatchingList() {
+        const list = document.querySelector('.matching-companies-list');
+
+        while (parent.firstChild) {
+            parent.removeChild(parent.firstChild);
+        }
     }
 
     static removeCompany(element) {
@@ -160,6 +176,9 @@ class Request {
 // Display Companies
 document.addEventListener('DOMContentLoaded', UI.displayCompanies);
 
+// Display Matching Companies
+document.addEventListener('DOMContentLoaded', UI.displayMatchingCompanies);
+
 // Add a Company
 document.querySelector('.add-company').addEventListener('submit', (e) => {
     // Prevent submit
@@ -176,7 +195,7 @@ document.querySelector('.add-company').addEventListener('submit', (e) => {
     const company = new Company(name, url, ID());
 
     // Add Company to UI
-    UI.addCompanyToList(company);
+    UI.addCompanyToDatabase(company);
 
     // Add Company to Store
     Store.addCompany(company);
@@ -198,7 +217,7 @@ document.querySelector('#input').addEventListener('change', (e) => {
             newCompany = new Company(company.name, company.url, ID());
 
             Store.addCompany(newCompany);
-            UI.addCompanyToList(newCompany);
+            UI.addCompanyToDatabase(newCompany);
         });
     });
 });
@@ -212,5 +231,9 @@ document.querySelector('.companies-list').addEventListener('click', (e) => {
     
         // Remove Company from UI
         UI.removeCompany(e.target);
+
+        // Refresh matching companies list
+        UI.clearMatchingList();
+        UI.displayMatchingCompanies();
     }
 })
